@@ -15,7 +15,7 @@ class PostsController < ApplicationController
   def create
 
     @post = current_user.posts.new(post_params)
-    if @post.save
+      if @post.save
       redirect_to posts_path, notice: 'Post created successfully.'
     else
       render 'new'
@@ -37,8 +37,15 @@ class PostsController < ApplicationController
       @post.destroy
       redirect_to posts_path, notice: 'Post deleted successfully.'
     else
-      redirect_to posts_path, alert: 'You are not authorized to delete this post.'
+      redirect_to posts_path, alert: 'You are not authorized to delete this post.'  
     end
+  end
+
+  def share
+    @post = Post.find(params[:id])
+    current_user.shares.create(post: @post)
+    @post.increment!(:share_count)
+    redirect_to @post, notice: 'Post shared!'
   end
 
   private

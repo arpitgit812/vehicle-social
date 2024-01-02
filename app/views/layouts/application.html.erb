@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>VehicleSocialApp</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -11,17 +11,49 @@
   </head>
 
   <body>
+    <header>
+      <% if user_signed_in? %>
+        <div class="user-info">
+          <%= "Welcome, #{current_user.email}" %>
+          <%#= link_to 'Logout', destroy_user_session_path, method: :delete, data: { turbolinks: false } %>
+        </div>
+      <% else %>
+        <%#= link_to 'Sign Up', new_user_registration_path, class: "signup_btn" %>
+        <%#= link_to 'Login', new_user_session_path, class: "login_btn" %>
+      <% end %>
+    </header>
+
     <%= yield %>
-    <% if user_signed_in? %>
-    <%= link_to 'Logout', destroy_user_session_path, method: :delete, data:{ turbolinks: false } %>
-  <% else %>
-    <%= link_to 'Sign Up', new_user_registration_path, class: "signup_btn"%>
-    <%= link_to 'Login', new_user_session_path, class: "login_btn" %>
-  <% end %>
+
     <% if flash[:notice] %>
       <div class="flash-notice">
         <%= flash[:notice] %>
       </div>
     <% end %>
-    </body>
+  </body>
+    <style>
+        body {
+      font-family: Arial, sans-serif;
+      background-color: #f3f3f3;
+      margin: 0;
+      padding: 0;
+      position: relative;
+    }
+
+    .flash-notice {
+      color: red;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      width: 80%;
+      text-align: center;
+      margin-top: 20px;
+    }
+  </style>
 </html>

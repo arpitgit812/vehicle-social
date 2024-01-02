@@ -8,7 +8,7 @@ class LikesController < ApplicationController
     if @like.save
       flash[:notice] = 'Post liked!'
     else
-      flash[:alert] = 'Failed to like the post.'
+      flash[:alert] = 'Failed to like the post but un.'
     end
 
     redirect_back(fallback_location: root_path)
@@ -16,7 +16,7 @@ class LikesController < ApplicationController
 
   def destroy
     @post = Post.find(params[:post_id])
-    @like = @post.likes.find(params[:id])
+    @like = @post.likes.find(params[:format])
 
     if @like.destroy
       flash[:notice] = 'Post unliked!'

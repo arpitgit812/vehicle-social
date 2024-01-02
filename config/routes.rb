@@ -12,6 +12,7 @@
     resources :posts do
       resources :comments, only: [:create, :destroy, :new, :index]
       member do
+        post 'share' 
         post 'create_likes', to: 'likes#create_likes', as: 'create_likes'
         delete 'like/:id', to: 'likes#destroy', as: 'destroy_like'
         # get 'comments/new', to: 'comments#new', as: 'new_comment'

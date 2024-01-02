@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_29_114426) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_02_075029) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -85,6 +85,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_29_114426) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id"
+    t.integer "share_count"
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
@@ -95,6 +96,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_29_114426) do
     t.integer "followed_id"
     t.index ["followed_id"], name: "index_relationships_on_followed_id"
     t.index ["follower_id"], name: "index_relationships_on_follower_id"
+  end
+
+  create_table "shares", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "post_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["post_id"], name: "index_shares_on_post_id"
+    t.index ["user_id"], name: "index_shares_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -117,4 +127,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_29_114426) do
   add_foreign_key "posts", "users"
   add_foreign_key "relationships", "users", column: "followed_id"
   add_foreign_key "relationships", "users", column: "follower_id"
+  add_foreign_key "shares", "posts"
+  add_foreign_key "shares", "users"
 end

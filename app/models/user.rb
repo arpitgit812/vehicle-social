@@ -11,6 +11,7 @@ class User < ApplicationRecord
 
   has_many :passive_follows, class_name: 'Follow', foreign_key: 'followed_id', dependent: :destroy
   has_many :followers, through: :passive_follows, source: :follower
+  has_many :shares, dependent: :destroy
 
   def following?(other_user)
     following.include?(other_user)
