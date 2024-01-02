@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Vehicle Social</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f3f3f3;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #3498db;
+    }
+
+    .post {
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 10px;
+      margin: 20px 0;
+      background-color: #fff;
+      text-align: center;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 40%;
+      height: 20rem;
+    }
+
+    h2 {
+      font-size: 20px;
+      color: #333;
+    }
+
+    p {
+      font-size: 16px;
+      color: #666;
+      margin-top: 10px;
+    }
+
+    .post-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .button-container button {
+      border: none;
+      border-radius: 3px;
+      padding: 10px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .button-container button.like-button {
+      background-color: #3498db;
+      color: #fff;
+    }
+
+    .button-container button.liked-button {
+      background-color: #e74c3c;
+      color: #fff;
+    }
+
+    .button-container button.comment-button,
+    .button-container button.read-comments-button {
+      background-color: #2ecc71;
+      color: #fff;
+    }
+
+    .img {
+      height: 230px;
+      width: 298px;
+    }
+
+    .flash-notice {
+      color: red;
+      position: relative;
+      left: 32rem;
+      top: -107rem;
+    }
+    
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Vehicle Social</h1>
+
+    <% @posts.each do |post| %>
+      <div class="post">
+        <h2><%= link_to post.title, post %></h2>
+        <p><%= post.content %></p>
+        <% if post.image.attached? %>
+          <%= image_tag post.image, class: "img" %>
+        <% end %> 
+        <div class="button-container">
+          <% if current_user && post.likes.exists?(user_id: current_user.id) %>
+            <%= button_to "Unlike", destroy_like_post_path(post, post.likes.find_by(user_id: current_user.id)), method: :delete, data: { confirm: 'Are you sure?' }, class: "liked-button", remote: true %>
+          <% else %>
+            <%= button_to "Like", create_likes_post_path(post), method: :post, data: { confirm: 'Are you sure?' }, class: "like-button", remote: true %>
+          <% end %>
+          <% if current_user %>
+            <%= button_to "Comment", new_post_comment_path(post_id: post.id), method: :get, class: "comment-button" %>
+            <%= button_to "Read Comments", post_comments_path(post), method: :get, class: "read-comments-button" %>
+          <% end %>
+        </div>
+      </div>  
+    <% end %>
+    
+
+    <div class="new-post-link">
+      <%= link_to 'New Post', new_post_path %>
+    </div>  
+    <div class="new-post-link">
+      <%= link_to 'Logout', destroy_user_session_path, method: :delete, data:{ turbolinks: false } %>
+    </div>
+    <div class="new-post-link">
+      <%= link_to 'Sign Up', new_user_registration_path, class: "signup_btn"%>
+    </div>
+    <div class="new-post-link">
+      <%= link_to 'Login', new_user_session_path, class: "login_btn" %>
+    </div>
+  </div>
+</body>
+<script>
+document.addEventListener('ajax:success', function(event) {
+  var button = event.target.querySelector('.like-button, .liked-button');
+  var response = event.detail[0];
+
+  if (button) {
+    if (response.liked) {
+      button.innerText = 'Unlike';
+      button.classList.remove('like-button');
+      button.classList.add('liked-button');
+    } else {
+      button.innerText = 'Like';
+      button.classList.remove('liked-button');
+      button.classList.add('like-button');
+    }
+  }
+});
+</script>

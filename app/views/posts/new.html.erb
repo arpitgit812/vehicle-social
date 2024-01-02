@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>New Post</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f3f3f3;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #3498db;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    .field {
+      margin-bottom: 20px;
+    }
+
+    input[type="file"] {
+      font-size: 16px;
+    }
+
+    .image-upload {
+      margin-bottom: 20px;
+    }
+
+    .actions {
+      text-align: center;
+    }
+
+    input[type="submit"] {
+      background-color: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      padding: 10px 20px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #2980b9;
+    }
+
+    .back-link {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .back-link a {
+      text-decoration: none;
+      color: #3498db;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>New Post</h1>
+
+    <%= form_with model: @post, local: true do |form| %>
+      <div class="field">
+        <%= form.label :title %><br />
+        <%= form.text_field :title %>
+      </div>
+
+      <div class="field">
+        <%= form.label :content %><br />
+        <%= form.text_area :content %>
+      </div>
+
+      <div class="field image-upload">
+        <%= form.label :image %><br />
+        <%= form.file_field :image %>
+      </div>
+
+      <div class="actions">
+        <%= form.submit 'Create Post' %>
+      </div>
+    <% end %>
+
+    <div class="back-link">
+      <%= link_to 'Back', posts_path %>
+    </div>
+  </div>
+</body>
+</html>

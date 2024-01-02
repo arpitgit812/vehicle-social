@@ -1,0 +1,6 @@
+<h2>Comments:</h2>
+<% @post.comments.each do |comment| %>
+  <p><strong><%= comment.user.username %>:</strong> <%= comment.content %></p>
+<% end %>
+
+<%= render 'comments/form', post: @post %>

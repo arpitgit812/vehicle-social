@@ -1,0 +1,11 @@
+<div class="comments-index">
+  <h2>Comments for <%= @post.title %></h2>
+  
+  <% @comments.each do |comment| %>
+    <div class="comment">
+      <p><strong><%=  %>:</strong> <%= comment.content %></p>
+    </div>
+  <% end %>
+
+  <%= link_to 'Back to Post', post_path(@post), class: 'back-link' %>
+</div>

@@ -1,0 +1,9 @@
+<% if user_signed_in? %>
+  <% if current_user.likes?(post) %>
+    <%= link_to "Unlike", post_like_path(post, post.likes.find_by(user_id: current_user.id)), method: :delete, class: "like-button" %>
+  <% else %>
+    <%= link_to "Like", post_likes_path(post), method: :post, class: "like-button" %>
+  <% end %>
+<% else %>
+  <%= link_to "Like", new_user_session_path, class: "like-button" %>
+<% end %>
