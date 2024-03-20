@@ -1,4 +1,13 @@
 #!/usr/bin/env ruby
-require_relative "../config/boot"
+
 require "rake"
-Rake.application.run
+require_relative "../config/boot"
+
+# Check if Rake tasks are defined
+if Rake.application.tasks.empty?
+  puts "No Rake tasks defined in the project."
+else
+  # Run the Rake tasks
+  Rake.application.run
+end
+
