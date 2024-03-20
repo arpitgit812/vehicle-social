@@ -25,4 +25,26 @@ ActiveAdmin.register AdminUser do
     f.actions
   end
 
+  # Add validation and error handling
+  controller do
+    def create
+      @admin_user = AdminUser.new(permitted_params[:admin_user])
+
+      if @admin_user.save
+        redirect_to admin_admin_users_path, notice: 'Admin user was successfully created.'
+      else
+        render :new
+      end
+    end
+
+    def update
+      @admin_user = AdminUser.find(params[:id])
+
+      if @admin_user.update(permitted_params[:admin_user])
+        redirect_to admin_admin_users_path, notice: 'Admin user was successfully updated.'
+      else
+        render :edit
+      end
+    end
+  end
 end
