@@ -1,1 +1,49 @@
 # See https://www.robotstxt.org/robotstxt.html for documentation on how to use the robots.txt file
+
+import re
+import urllib.parse
+import urllib.request
+
+def can_crawl(url, robots_url=None):
+    """
+    Check if the URL can be crawled according to the rules specified in the `robots.txt` file.
+
+    Args:
+        url (str): The URL to check.
+        robots_url (str, optional): The URL of the `robots.txt` file. If not provided, it will be inferred from the `url`.
+
+    Returns:
+        bool: True if the URL can be crawled, False otherwise.
+    """
+    if robots_url is None:
+        robots_url = f"{urllib.parse.urlparse(url).scheme}://{urllib.parse.urlparse(url).netloc}/robots.txt"
+
+    user_agent = "my_user_agent"  # replace with your user agent
+
+    request = urllib.request.Request(robots_url)
+    request.add_header("User-Agent", user_agent)
+
+    with urllib.request.urlopen(request) as response:
+        robots_txt = response.read().decode()
+
+    for line in robots_txt.split("\n"):
+        line = line.strip()
+        if not line:
+            continue
+
+        if line.startswith("User-agent:"):
+            if user_agent not in line:
+                return False
+            continue
+
+        if line.startswith("Disallow:"):
+            path = line[len("Disallow:") :].strip()
+            if re.match(path, urllib.parse.urlparse(url).path):
+                return False
+
+    return True
+
+# Example usage
+url = "https://example.com/page1"
+print(can_crawl(url))
+``
