@@ -2,7 +2,12 @@
 <html>
 <head>
   <title>Log in</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: Arial, sans-serif;
       background-color: #f3f3f3;
@@ -13,7 +18,8 @@
       border: 1px solid #ddd;
       border-radius: 5px;
       box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-      width: 300px;
+      width: 100%;
+      max-width: 300px;
       margin: 0 auto;
       padding: 75px;
       margin-top: 20px;
@@ -45,13 +51,22 @@
       font-size: 16px;
     }
 
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+      outline: none;
+      box-shadow: 0 0 3px 1px #3498db;
+    }
+
     .actions {
       margin-top: 20px;
       text-align: center;
     }
 
     input[type="submit"] {
-      background: linear-gradient(to bottom right, #EF4765, #FF9A5A);
+      --primary: linear-gradient(to bottom right, #EF4765, #FF9A5A);
+      --secondary: #2980b9;
+      --disabled: #ddd;
+      background: var(--primary);
       border: 0;
       border-radius: 12px;
       color: #FFFFFF;
@@ -74,7 +89,12 @@
     }
 
     input[type="submit"]:hover {
-      background-color: #2980b9;
+      background-color: var(--secondary);
+    }
+
+    input[type="submit"]:disabled {
+      background-color: var(--disabled);
+      cursor: not-allowed;
     }
 
     .app-name {
@@ -83,50 +103,17 @@
       color: #3498db;
       margin-top: 20px;
     }
-    .login_btn{
+
+    .login_btn,
+    .signup_btn {
       display: none;
     }
-    .signup_btn{
-      display: none;
-    }
-    .link_signup{
+
+    .link_signup,
+    .link_forgot {
       color: blue;
     }
-    .link_forgot{
-      color: blue;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-  <center><h1>Vehicle Social<h1/></center>
-    <h2>Log in</h2>
 
-    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-      <div class="field">
-        <%= f.label :email %><br />
-        <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-      </div>
-
-      <div class="field">
-        <%= f.label :password %><br />
-        <%= f.password_field :password, autocomplete: "current-password" %>
-      </div>
-
-      <% if devise_mapping.rememberable? %>
-        <div class="field">
-          <%= f.check_box :remember_me %>
-          <%= f.label :remember_me %>
-        </div>
-      <% end %>
-
-      <div class="actions">
-        <%= f.submit "Log in" %>
-      </div>
-    <% end %>
-
-    <%= render "devise/shared/links" %>
-  </div>
-
-</body>
-</html>
+    @media (max-width: 480px) {
+      .container {
+        padding: 5
