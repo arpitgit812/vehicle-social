@@ -1,1 +1,6 @@
-<%#= pluralize(post.likes.count, 'like') %>
+<%= pluralize(post.likes.count, "like") %>
+
+
+def pluralize(count, word)
+  count == 1 ? word : word + "s"
+end
