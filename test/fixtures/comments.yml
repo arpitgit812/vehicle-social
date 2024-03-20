@@ -1,13 +1,19 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+# Read about factories at https://github.com/thoughtbot/factory_bot
 
-one:
-  content: MyText
-  user: one
-  commentable: one
-  commentable_type: Commentable
+FactoryBot.define do
+  factory :comment do
+    content { "MyText" }
+    user
+    commentable
 
-two:
-  content: MyText
-  user: two
-  commentable: two
-  commentable_type: Commentable
+    factory :comment_one do
+      user { User.find_or_create_by(name: "one") }
+      commentable { Commentable.find_or_create_by(name: "one") }
+    end
+
+    factory :comment_two do
+      user { User.find_or_create_by(name: "two") }
+      commentable { Commentable.find_or_create_by(name: "two") }
+    end
+  end
+end
