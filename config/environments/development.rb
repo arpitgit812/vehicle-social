@@ -1,54 +1,47 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
-  # Settings specified here will take precedence over those in config/application.rb.
+  # Settings for the development environment.
 
-  # In the development environment your application's code is reloaded any time
-  # it changes. This slows down response time but is perfect for development
-  # since you don't have to restart the web server when you make code changes.
+  # Reload classes and recompile coffee scripts and assets on each request.
   config.cache_classes = false
+  config.assets.compile = true
+  config.assets.debug = true
+  config.coffee_rails.source_map_commands = { force: true }
 
-  # Do not eager load code on boot.
+  # Don't eager load code on boot.
   config.eager_load = false
 
-  # Show full error reports.
+  # Show full error reports and notify on errors.
   config.consider_all_requests_local = true
+  config.action_controller.perform_caching = false
 
-  # Enable server timing
+  # Enable server timing.
   config.server_timing = true
 
-  # Enable/disable caching. By default caching is disabled.
-  # Run rails dev:cache to toggle caching.
-  if Rails.root.join("tmp/caching-dev.txt").exist?
-    config.action_controller.perform_caching = true
-    config.action_controller.enable_fragment_cache_logging = true
+  # Enable/disable caching based on the existence of a file.
+  config.after_initialize do
+    if Rails.root.join("tmp/caching-dev.txt").exist?
+      config.action_controller.perform_caching = true
+      config.action_controller.enable_fragment_cache_logging = true
 
-    config.cache_store = :memory_store
-    config.public_file_server.headers = {
-      "Cache-Control" => "public, max-age=#{2.days.to_i}"
-    }
-  else
-    config.action_controller.perform_caching = false
-
-    config.cache_store = :null_store
+      config.cache_store = :memory_store
+      config.public_file_server.headers = {
+        "Cache-Control" => "public, max-age=#{2.days.to_i}"
+      }
+    else
+      config.cache_store = :null_store
+    end
   end
 
-  # Store uploaded files on the local file system (see config/storage.yml for options).
+  # Store uploaded files on the local file system.
   config.active_storage.service = :local
 
-  # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
+  # Don't raise errors for missing translations.
+  config.i18n.raise_on_missing_translations = false
 
-  config.action_mailer.perform_caching = false
-
-  # Print deprecation notices to the Rails logger.
-  config.active_support.deprecation = :log
-
-  # Raise exceptions for disallowed deprecations.
-  config.active_support.disallowed_deprecation = :raise
-
-  # Tell Active Support which deprecation messages to disallow.
-  config.active_support.disallowed_deprecation_warnings = []
+  # Don't raise errors for disallowed deprecations.
+  config.active_support.disallowed_deprecation = :log
 
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load
@@ -59,12 +52,10 @@ Rails.application.configure do
   # Suppress logger output for asset requests.
   config.assets.quiet = true
 
-  # Raises error for missing translations.
-  # config.i18n.raise_on_missing_translations = true
-
-  # Annotate rendered view with file names.
-  # config.action_view.annotate_rendered_view_with_filenames = true
-
-  # Uncomment if you wish to allow Action Cable access from any origin.
-  # config.action_cable.disable_request_forgery_protection = true
+  # Reload classes in development mode.
+  config.to_prepare do
+    Dir.glob(Rails.root.join("app", "models", "*.rb")).each do |c|
+      require_dependency(c)
+    end
+  end
 end
