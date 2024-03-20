@@ -1,9 +1,33 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+gem 'factory_bot_rails'
 
-one:
-  user: one
-  post: one
 
-two:
-  user: two
-  post: two
+FactoryBot.define do
+  factory :user do
+    sequence(:username) { |n| "user_#{n}" }
+  end
+end
+
+
+FactoryBot.define do
+  factory :post do
+    sequence(:title) { |n| "Post #{n}" }
+    user
+  end
+end
+
+
+RSpec.configure do |config|
+  config.include FactoryBot::Syntax::Methods
+end
+
+
+require 'rails_helper'
+
+RSpec.feature 'Your feature', :type => :feature do
+  scenario 'example scenario' do
+    user = create(:user)
+    post = create(:post, user: user)
+
+    # Your test code here
+  end
+end
