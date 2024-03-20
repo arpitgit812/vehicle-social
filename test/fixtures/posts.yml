@@ -1,9 +1,39 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+FactoryBot.define do
+  factory :post do
+    title { Faker::Lorem.word }
+    content { Faker::Lorem.paragraph }
+  end
+end
 
-one:
-  title: MyString
-  content: MyText
 
-two:
-  title: MyString
-  content: MyText
+RSpec.configure do |config|
+  config.before(:suite) do
+    DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner.strategy = :transaction
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
+
+  config.after(:each) do
+    DatabaseCleaner.clean
+  end
+end
+
+
+require 'rails_helper'
+
+RSpec.describe Post, type: :model do
+  it 'has a valid factory' do
+    expect(build(:post)).to be_valid
+  end
+
+  it 'is not valid without a title' do
+    expect(build(:post, title: nil)).to_not be_valid
+  end
+
+  it 'is not valid without content' do
+    expect(build(:post, content: nil)).to_not be_valid
+  end
+end
