@@ -1,21 +1,22 @@
 # app/controllers/posts_controller.rb
 
 class PostsController < ApplicationController
-    before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
-    before_action :set_post, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
+  before_action :set_post, only: [:show, :edit, :update, :destroy]
 
+  # Improvement: Use `@posts` variable only when it's an index action
   def index
-    @posts = Post.all
+    @posts = policy_scope(Post)
   end
 
   def new
-    @post = Post.new
+    @post = current_user.posts.build
   end
 
   def create
+    @post = current_user.posts.build(post_params)
 
-    @post = current_user.posts.new(post_params)
-      if @post.save
+    if @post.save
       redirect_to posts_path, notice: 'Post created successfully.'
     else
       render 'new'
@@ -23,21 +24,16 @@ class PostsController < ApplicationController
   end
 
   def edit
-    # Ensure that the user trying to edit is the owner of the post
-    if @post.user == current_user
-      render :edit
-    else
-      redirect_to posts_path, alert: 'You are not authorized to edit this post.'
-    end
+    authorize @post
   end
 
   def destroy
-    # Ensure that the user trying to delete is the owner of the post
-    if @post.user == current_user
-      @post.destroy
+    authorize @post
+
+    if @post.destroy
       redirect_to posts_path, notice: 'Post deleted successfully.'
     else
-      redirect_to posts_path, alert: 'You are not authorized to delete this post.'  
+      redirect_to posts_path, alert: 'You are not authorized to delete this post.'
     end
   end
 
@@ -56,5 +52,12 @@ class PostsController < ApplicationController
 
   def post_params
     params.require(:post).permit(:title, :content, :image)
+  end
+
+  # Add authorization using Pundit
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+
+  def user_not_authorized
+    redirect_to posts_path, alert: 'You are not authorized to perform this action.'
   end
 end
