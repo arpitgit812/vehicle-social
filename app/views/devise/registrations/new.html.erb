@@ -63,98 +63,85 @@
     input[type="submit"]:hover {
       background-color: #2980b9;
     }
-    .login_btn{
-      display: none;
-    }
-    .signup_btn{
-      display: none;
-    }
-    .signin_btn{
-      display: none
-    }
-    .msg{
+
+    .msg {
       margin: auto;
       width: 50%;
-
       padding: 10px;
+      text-align: center;
     }
 
-      .login_btn_1 {
-        background: linear-gradient(to bottom right, #EF4765, #FF9A5A);
-        border: 0;
-        border-radius: 12px;
-        color: #FFFFFF;
-        cursor: pointer;
-        display: inline-block;
-        font-family: -apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-        font-size: 16px;
-        font-weight: 500;
-        line-height: 2.5;
-        outline: transparent;
-        padding: 0 1rem;
-        text-align: center;
-        text-decoration: none;
-        transition: box-shadow .2s ease-in-out;
-        user-select: none;
-        -webkit-user-select: none;
-        touch-action: manipulation;
-        white-space: nowrap;
-        margin-left: 128px;
-        height: 50px;
+    .login_btn {
+      display: none;
+    }
 
-      }
+    .signup_btn {
+      display: none;
+    }
 
-      .button-62:not([disabled]):focus {
-        box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
-      }
+    .signin_btn {
+      display: none;
+    }
 
-      .button-62:not([disabled]):hover {
-        box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
-      }
+    .login_btn_1 {
+      background: linear-gradient(to bottom right, #EF4765, #FF9A5A);
+      border: 0;
+      border-radius: 12px;
+      color: #FFFFFF;
+      cursor: pointer;
+      display: inline-block;
+      font-family: -apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 2.5;
+      outline: transparent;
+      padding: 0 1rem;
+      text-align: center;
+      text-decoration: none;
+      transition: box-shadow .2s ease-in-out;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      white-space: nowrap;
+      margin-left: 128px;
+      height: 50px;
+    }
+
+    .button-62:not([disabled]):focus,
+    .button-62:not([disabled]):hover {
+      box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <center><h1>Vehicle Social</h1></center>
+    <center>
+      <h1>Vehicle Social</h1>
+    </center>
     <h2>Sign up</h2>
-    
 
     <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
       <%= render "devise/shared/error_messages", resource: resource %>
 
       <div class="field">
-        <%= f.label :email %><br />
-        <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+        <%= label :email, 'Email' %>
+        <br />
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", required: true %>
       </div>
 
       <div class="field">
-        <%= f.label :password %>
-          <% if @minimum_password_length %>
+        <%= label :password, 'Password' %>
+        <% if @minimum_password_length %>
           <em>(<%= @minimum_password_length %> characters minimum)</em>
-        <% end %><br />
-        <%= f.password_field :password, autocomplete: "new-password" %>
+        <% end %>
+        <br />
+        <%= f.password_field :password, autocomplete: "new-password", required: true, minlength: @minimum_password_length %>
       </div>
 
       <div class="field">
-        <%= f.label :password_confirmation %><br />
-        <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-      </div>
-      
-      <div class="field">
-        <%= f.label :username %><br />
-        <%= f.text_field :username %>
+        <%= label :password_confirmation, 'Confirm Password' %>
+        <br />
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", required: true %>
       </div>
 
-      <div class="actions">
-        <%= f.submit "Sign up" %>
-      </div>
-      <div class="msg">
-        <h5>Already have an account? Login</h5>
-      </div>
-      <div><%= link_to 'Login', new_user_session_path, class: "login_btn_1"%></div>
-    <% end %>
-
-    <%= render "devise/shared/links" %>
-  </div>
-</body>
-</html>
+      <div class="
